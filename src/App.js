@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ZipCodeEntry from './components/ZipCodeEntry'
 
 class App extends Component {
   constructor() {
@@ -29,22 +29,37 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h1>Address</h1>
         </header>
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <ZipCodeEntry 
+                userZip = {this.state.userZip}
+                handleChange = {this.handleChange}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
 export default App;
+
+
+//  <form id="zip-code-form">
+// <div className="form-group">
+//     <label htmlFor="zip-code">
+//         Please Enter a Zip Code :
+//     </label>
+//     <input 
+//         className="form-control form-control-lg"
+//         id="userZip"
+//         value={this.state.userZip}
+//         name="userZip"
+//         onChange={this.handleChange}>
+//     </input>
+// </div>
+// </form> 
