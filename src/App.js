@@ -12,6 +12,7 @@ class App extends Component {
       city: "",
       state: "",
       showAddress: false,
+      status: ""
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -23,6 +24,20 @@ class App extends Component {
     this.setState({
       [name]: value
     });
+
+    console.log(parseInt(value))
+
+    if(name === "userZip" && value.length === 5) {
+      let temp = Number(value)
+      if (isNaN(temp)) {
+        this.setState({status:"Please enter a number."})
+      }
+      else {
+        this.setState({zip: temp})
+        this.setState({showAddress: true})
+      }
+    }
+
   }
 
   render() {
