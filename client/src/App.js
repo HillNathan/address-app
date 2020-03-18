@@ -7,6 +7,7 @@ class App extends Component {
     super();
 
     this.state = {
+      data: "",
       userZip: "",
       zip: 0,
       city: "",
@@ -17,6 +18,24 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
   }
+
+  componentDidMount() {
+    // Call our fetch function below once the component mounts
+    this.callBackendAPI()
+      .then(res => this.setState({ data: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
+  callBackendAPI = async () => {
+    const response = await fetch('/express_backend');
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message) 
+    }
+    return body;
+  };
   
   handleChange(event) {
     let { name, value } = event.target;
@@ -55,6 +74,13 @@ class App extends Component {
               />
             </div>
           </div>
+
+          <div className="row">
+            <div className="col">
+              <p className="App-intro">{this.state.data}</p>
+            </div>
+          </div>
+
         </div>
       </div>
     );
