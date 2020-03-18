@@ -53,6 +53,8 @@ class App extends Component {
       }
       else {
         this.setState({zip: temp})
+        // call the server and get the city and state for the zip that was entered
+        
         this.setState({showAddress: true})
       }
     }
@@ -90,17 +92,3 @@ class App extends Component {
 export default App;
 
 
-//  <form id="zip-code-form">
-// <div className="form-group">
-//     <label htmlFor="zip-code">
-//         Please Enter a Zip Code :
-//     </label>
-//     <input 
-//         className="form-control form-control-lg"
-//         id="userZip"
-//         value={this.state.userZip}
-//         name="userZip"
-//         onChange={this.handleChange}>
-//     </input>
-// </div>
-// </form> 
