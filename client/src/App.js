@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ZipCodeEntry from './components/ZipCodeEntry'
+import AddressEntry from './components/AddressEntry'
 
 const axios = require('axios');
 
@@ -10,6 +11,7 @@ class App extends Component {
 
     this.state = {
       userZip: "",
+      address: "",
       zip: 0,
       city: "",
       state: "",
@@ -27,6 +29,15 @@ class App extends Component {
       cb(response.data)
     })
   };
+
+  callMapIt(searchAddress, searchCity, searchState, searchZip) {
+    var url = "https://www.google.com/maps/place/" + 
+      searchAddress.replace(/ /gi, "+") + ",+" + 
+      searchCity.replace(/ /gi, "+") + ",+" +
+      searchState + "+" + 
+      searchZip;
+    window.open(url, '_blank')
+  }
   
   handleChange(event) {
     let { name, value } = event.target;
@@ -35,17 +46,14 @@ class App extends Component {
       [name]: value
     });
 
-    var temp = Number(value)
-    if (isNaN(temp)) {
-      // checking to make sure we actually have a number before we submit to the server
-      this.setState({status:"Please enter numbers only."})
-    }
-    else {
-      this.setState({status:""})
-    }
-
     // this section of code will only trigger once the length of the string in the input field hits 5
     if(name === "userZip" && value.length === 5) {
+      var temp = Number(value)
+      if (isNaN(temp)) {
+        // checking to make sure we actually have a number before we submit to the server
+        this.setState({status:"Please enter numbers only."})
+      }
+      else {
         this.setState({zip: temp})
         // call the server and get the city and state for the zip that was entered
         this.callGetZipInfo(temp, zipArray => {
@@ -75,12 +83,14 @@ class App extends Component {
           showAddress: true,
           })
       }
+    }
     else if (name === "userZip" && value.length !== 5){
       // stop displaying the city and state if the zip code does not match 5 digits
       this.setState({
         city: "",
         state: "",
-        showAddress: false
+        showAddress: false,
+        status: ""
       })
     }
   }
@@ -114,6 +124,23 @@ class App extends Component {
               {this.state.showAddress ? 
                 <div> 
                   {this.state.city + ", " + this.state.state}
+                </div> : 
+                <div></div>}
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col">
+              {this.state.showAddress ? 
+                <div> 
+                  <AddressEntry 
+                    address = {this.state.address}
+                    city = {this.state.city}
+                    state = {this.state.state}
+                    zip = {this.state.zip}
+                    handleChange = {this.handleChange}
+                    handleClick = {this.callMapIt}
+                  />
                 </div> : 
                 <div></div>}
             </div>
