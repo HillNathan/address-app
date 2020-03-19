@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import ZipCodeEntry from './components/ZipCodeEntry'
 
+const axios = require('axios');
+
 class App extends Component {
   constructor() {
     super();
@@ -36,6 +38,26 @@ class App extends Component {
     }
     return body;
   };
+
+  callHomeZip = async () => {
+    const response = await fetch('/get_home');
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message) 
+    }
+    console.log(body)
+    return body;
+  };
+
+  callGetZipInfo = async (targetZip, cb) => {
+    let body = {zipCode : targetZip}
+    console.log(body)
+    axios.post('/get_zip', {zipCode: targetZip})
+    .then(response => {
+      cb(response.data)
+    })
+  };
   
   handleChange(event) {
     let { name, value } = event.target;
@@ -54,8 +76,21 @@ class App extends Component {
       else {
         this.setState({zip: temp})
         // call the server and get the city and state for the zip that was entered
-        
-        this.setState({showAddress: true})
+        // this.callHomeZip()
+        this.callGetZipInfo(temp, zipArray => {
+          console.log(zipArray.data)
+          zipArray.data.forEach(item => {
+            if (item.LocationType === "PRIMARY") {
+              this.setState({
+                city: item.City,
+                state: item.State
+              })
+            }
+          })
+        })
+        this.setState({
+          showAddress: true,
+          })
       }
     }
 
