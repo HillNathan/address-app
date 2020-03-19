@@ -9,7 +9,6 @@ class App extends Component {
     super();
 
     this.state = {
-      data: "",
       userZip: "",
       zip: 0,
       city: "",
@@ -21,38 +20,8 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
-    // Call our fetch function below once the component mounts
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.express }))
-      .catch(err => console.log(err));
-  }
-
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = await fetch('/express_backend');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message) 
-    }
-    return body;
-  };
-
-  callHomeZip = async () => {
-    const response = await fetch('/get_home');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message) 
-    }
-    console.log(body)
-    return body;
-  };
-
   callGetZipInfo = async (targetZip, cb) => {
-    let body = {zipCode : targetZip}
-    console.log(body)
+    // using axios as our html package of choice to hit our server routes. 
     axios.post('/get_zip', {zipCode: targetZip})
     .then(response => {
       cb(response.data)
@@ -66,34 +35,54 @@ class App extends Component {
       [name]: value
     });
 
-    console.log(parseInt(value))
+    var temp = Number(value)
+    if (isNaN(temp)) {
+      // checking to make sure we actually have a number before we submit to the server
+      this.setState({status:"Please enter numbers only."})
+    }
+    else {
+      this.setState({status:""})
+    }
 
+    // this section of code will only trigger once the length of the string in the input field hits 5
     if(name === "userZip" && value.length === 5) {
-      let temp = Number(value)
-      if (isNaN(temp)) {
-        this.setState({status:"Please enter a number."})
-      }
-      else {
         this.setState({zip: temp})
         // call the server and get the city and state for the zip that was entered
-        // this.callHomeZip()
         this.callGetZipInfo(temp, zipArray => {
           console.log(zipArray.data)
-          zipArray.data.forEach(item => {
-            if (item.LocationType === "PRIMARY") {
-              this.setState({
-                city: item.City,
-                state: item.State
-              })
-            }
-          })
+          if (zipArray.data.length === 0) {
+            // if there is no city found for the zip code provided, give a message saying this
+            this.setState({
+              city: "CITY NOT FOUND",
+              state: "NA"
+            })
+          }
+          else {
+            zipArray.data.forEach(item => {
+              // search through the array of data for the primary address for the zip code and 
+              //  place that information into our state. 
+              if (item.LocationType === "PRIMARY") {
+                this.setState({
+                  city: item.City,
+                  state: item.State
+                })
+              }
+            })
+          }
         })
         this.setState({
+          //set the flag in state to show the div with the address 
           showAddress: true,
           })
       }
+    else if (name === "userZip" && value.length !== 5){
+      // stop displaying the city and state if the zip code does not match 5 digits
+      this.setState({
+        city: "",
+        state: "",
+        showAddress: false
+      })
     }
-
   }
 
   render() {
@@ -114,7 +103,19 @@ class App extends Component {
 
           <div className="row">
             <div className="col">
-              <p className="App-intro">{this.state.data}</p>
+              <div className="message">
+                {this.state.status}
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col">
+              {this.state.showAddress ? 
+                <div> 
+                  {this.state.city + ", " + this.state.state}
+                </div> : 
+                <div></div>}
             </div>
           </div>
 
