@@ -1,10 +1,10 @@
-const db = require("../controller")
-
+const db = require("../controller");
+var path = require("path");
 
 module.exports = app => {
 
     app.get('/', (req,res) => {
-        res.send('index.html')
+        res.send(path.join(__dirname, "index.html"));
     })
 
     app.get('/express_backend', (req, res) => {
