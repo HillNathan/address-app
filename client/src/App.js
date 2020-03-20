@@ -103,7 +103,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router><Switch>
         <Route exact path="/">
           <div className="App">
             <header className="App-header">
@@ -157,7 +157,7 @@ class App extends Component {
             </div>
           </div>
           </Route>
-      </Router>
+          </Switch></Router>
     );
   }
 }
