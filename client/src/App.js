@@ -31,8 +31,8 @@ state = {
 
   render() {
     return (
-      <Router><Switch>
-        <Route exact path="/">
+      // <Router><Switch>
+      //   <Route exact path="/">
           <div className="App">
             <header className="App-header">
               <img src={logo} className="App-logo" alt="logo" />
@@ -40,8 +40,8 @@ state = {
             </header>
             <p className="App-intro">{this.state.data}</p>
           </div> 
-          </Route>
-    </Switch></Router>
+          {/* </Route>
+    </Switch></Router> */}
     );
   }
 }
