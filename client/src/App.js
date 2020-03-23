@@ -103,7 +103,7 @@ class App extends Component {
   render() {
     return (
       <Router><Switch>
-        <Route path="/">
+        <Route exact path="/">
           <div className="App">
             <header className="App-header">
               <h1>Address</h1>
