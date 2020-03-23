@@ -7,7 +7,9 @@
     "concurrently": "^5.1.0",
     "dot-env": "^0.0.1",
     "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.3",
     "if-env": "^1.0.4",
+    "mysql": "^2.18.1",
     "nice-try": "^2.0.1"
   },
   "devDependencies": {},
