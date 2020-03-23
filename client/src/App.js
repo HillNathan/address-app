@@ -155,8 +155,8 @@ class App extends Component {
 
             </div>
           </div>
-          </Route>
-          </Switch></Router>
+        </Route>
+        </Switch></Router>
     );
   }
 }
