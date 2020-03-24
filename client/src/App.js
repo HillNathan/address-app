@@ -30,6 +30,7 @@ class App extends Component {
   callGetZipInfo = async (targetZip, cb) => {
     let bodyObj = {};
     bodyObj.zipCode =  targetZip;
+    console.log(bodyObj)
     // using axios as our html package of choice to hit our server routes. 
     axios.post('/get_zip', bodyObj)
     .then((response, err) => {

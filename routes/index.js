@@ -12,7 +12,8 @@ module.exports = app => {
       });
 
     app.post('/get_zip', (req, res) => {
-        db.getInfo(req.body.zipCode, response => {
+        console.log(req.body.zipCode)
+        db.getInfo(req.body.zipCode, (response, err) => {
             if (err) {
                 res.send({data:err})
             }
